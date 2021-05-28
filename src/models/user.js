@@ -39,12 +39,12 @@ const userSchema = new mongoose.Schema(
     role: {
       type: String,
       enum: ["admin", "user"],
-      default: "admin",
+      default: "user",
     },
     contactNumber: { type: String },
     profilePicture: { type: String },
   },
-  { timestamp: true }
+  { timestamps: true }
 );
 
 userSchema.virtual("password").set(function (password) {
