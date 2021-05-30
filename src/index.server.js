@@ -2,7 +2,8 @@ const express = require("express"); // import express for running server
 const app = express(); //calling express function
 const env = require("dotenv"); //import dotenv for setting environment variables
 const mongoose = require("mongoose");
-const userRoutes = require("../src/routes/user"); //routes
+const authRoutes = require("../src/routes/auth"); //routes
+const adminRoutes = require("../src/routes/admin/auth");
 
 env.config(); //environment variable
 mongoose
@@ -21,7 +22,8 @@ mongoose
 app.use(express.urlencoded({ extended: true }));
 // parse application/x-www-form-urlencoded
 app.use(express.json()); // express built-in parsers Used to parse JSON bodies
-app.use("/api", userRoutes);
+app.use("/api", authRoutes);
+app.use("/api", adminRoutes);
 
 app.listen(process.env.PORT, () => {
   console.log(`server is running on port: ${process.env.PORT}`);

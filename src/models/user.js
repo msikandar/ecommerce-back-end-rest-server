@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema(
       unique: true,
       lowercase: true,
     },
-    hash_passsword: {
+    hash_password: {
       type: String,
       required: true,
     },
@@ -48,12 +48,14 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.virtual("password").set(function (password) {
-  this.hash_passsword = bcrypt.hashSync(password, 10);
+  this.hash_password = bcrypt.hashSync(password, 10);
 });
-
+userSchema.virtual("fullName").get(function () {
+  return `${this.firstName} ${this.lastName}`;
+});
 userSchema.methods = {
-  authenticate: async function (password) {
-    return await bcrypt.compare(password, this.hash_password);
+  authenticate: function (password) {
+    return bcrypt.compare(password, this.hash_password);
   },
 };
 
