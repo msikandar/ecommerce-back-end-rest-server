@@ -45,10 +45,11 @@ exports.signup = (req, res) => {
  * @param {object} res
  */
 exports.signin = (req, res) => {
-  User.findOne({ email: req.body.email }).exec((error, user) => {
+  User.findOne({ email: req.body.email }).exec(async (error, user) => {
     if (error) return res.status(400).json({ error: error });
     if (user) {
-      if (user.authenticate(req.body.password)) {
+      const isPassword = await user.authenticate(req.body.password);
+      if (isPassword && user.role === "user") {
         // return res.status(200).json({ message: "login success" });
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
           expiresIn: "1h",
@@ -74,17 +75,4 @@ exports.signin = (req, res) => {
       res.status(400).json({ message: "Something went wrong" });
     }
   });
-};
-
-/**
- * middleware function to verify token
- * @param {object} req user request object to server
- * @param {object} res response object from server to user
- * @param {function} next callback function
- */
-exports.requireSignin = (req, res, next) => {
-  const token = req.headers.authorization.split(" ")[1];
-  var user = jwt.verify(token, process.env.JWT_SECRET);
-  req.user = user;
-  next();
 };
