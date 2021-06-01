@@ -12,7 +12,7 @@ const categorySchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    productId: {
+    parentId: {
       type: String,
     },
   },

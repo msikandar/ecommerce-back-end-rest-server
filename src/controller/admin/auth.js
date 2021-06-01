@@ -52,9 +52,13 @@ exports.signin = (req, res) => {
       const isPassword = await user.authenticate(req.body.password);
       if (isPassword && user.role === "admin") {
         // return res.status(200).json({ message: "login success" });
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-          expiresIn: "1h",
-        });
+        const token = jwt.sign(
+          { _id: user._id, role: user.role },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "1h",
+          }
+        );
         const { _id, firstName, lastName, email, role, password, fullName } =
           user;
         return res.status(200).json({
@@ -70,11 +74,10 @@ exports.signin = (req, res) => {
           },
         });
       } else {
-        res.status(400).json({ massage: "Invalid password" });
+        res.status(400).json({ massage: "Invalid User or Password" });
       }
     } else {
       res.status(400).json({ message: "Something went wrong" });
     }
   });
 };
-
