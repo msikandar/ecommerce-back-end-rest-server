@@ -73,7 +73,7 @@ exports.signin = (req, res) => {
           },
         });
       } else {
-        res.status(400).json({ massage: "Invalid User or Password" });
+        res.status(400).json({ message: "Invalid User or Password" });
       }
     } else {
       res.status(400).json({ message: "Something went wrong" });

@@ -8,6 +8,7 @@ const adminRoutes = require("../src/routes/admin/auth");
 const categoryRoutes = require("../src/routes/category");
 const productRoutes = require("../src/routes/product");
 const cartRoutes = require("../src/routes/cart");
+const cors = require("cors");
 
 env.config(); //environment variable
 mongoose
@@ -23,11 +24,11 @@ mongoose
   .then(() => {
     console.log("databse connected");
   });
-
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 // parse application/x-www-form-urlencoded
 app.use(express.json()); // express built-in parsers Used to parse JSON bodies
-app.use("/public",express.static(path.join(__dirname, "uploads")));
+app.use("/public", express.static(path.join(__dirname, "uploads")));
 app.use("/api", authRoutes);
 app.use("/api", adminRoutes);
 app.use("/api", categoryRoutes);
